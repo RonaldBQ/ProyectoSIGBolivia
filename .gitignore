@@ -6,6 +6,7 @@
 #Packages
 build/
 nbbuild/
+nbproject/
 dist/
 nbdist/
 .nb-gradle/
