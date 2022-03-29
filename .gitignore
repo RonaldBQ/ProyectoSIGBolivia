@@ -1,6 +1,13 @@
 /dist/
+
 #Files
 
 #Packages
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
 
 #Libraries
+mssql-jdbc-9.2.1.jre8.jar/
