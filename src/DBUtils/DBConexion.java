@@ -14,9 +14,8 @@ public class DBConexion {
     
     /**
      * Método estático para conectar la base de datos SQL Server 
-     * 
      */
-    public static void conectarBD() {
+    public static void conectar() {
         try {
             Class.forName(DRIVER);
             conexion = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -32,7 +31,6 @@ public class DBConexion {
      * @return Devuelve la cadena de conexion de tipo Connection
      */
     public Connection getConection() {
-        conectarBD();
         return conexion;
     }
     /**
