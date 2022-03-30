@@ -1,7 +1,7 @@
 /dist/
 
 #Files
-.xml
+*.xml
 
 #Packages
 build/
