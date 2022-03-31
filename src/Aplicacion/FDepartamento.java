@@ -2,10 +2,7 @@
 package Aplicacion;
 
 import DBUtils.DBConexion;
-import static DBUtils.DBConexion.conectar;
-import Datos.Departamento;
 import java.sql.*;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
