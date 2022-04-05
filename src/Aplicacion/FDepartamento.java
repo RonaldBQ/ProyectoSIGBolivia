@@ -17,15 +17,16 @@ public class FDepartamento {
     
     /**
      * Método que retorna todos los registros de la tabla departamentos en un modelo DefaultTabkeModel
+     * @param buscar 
      * @return modelo
      */
-    public DefaultTableModel mostrar(){
+    public DefaultTableModel mostrar(String buscar){
         DefaultTableModel modelo;
         String [] titulos ={"CODIGO","NOMBRE","SUPERFICIE","IMAGEN"};
         String [] registro = new String[4];
         totalRegistros = 0;
         modelo = new DefaultTableModel(null, titulos);
-        SQL = "SELECT * FROM departamento";
+        SQL = "SELECT * FROM departamento WHERE nombre LIKE '"+buscar+"%'";
         try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(SQL);
