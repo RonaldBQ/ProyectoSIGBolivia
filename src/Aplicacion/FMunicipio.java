@@ -20,9 +20,10 @@ public class FMunicipio {
     
     /**
      * Método que retorna todos los registros de la tabla Municipios en un modelo DefaultTabkeModel
+     * @param buscar
      * @return modelo
      */
-    public DefaultTableModel mostrar(){
+    public DefaultTableModel mostrar(String buscar){
         DefaultTableModel modelo;
         String [] titulos ={"ID","NOMBRE","POBLACION","provincia"};
         String [] registro = new String[4];
@@ -30,7 +31,8 @@ public class FMunicipio {
         modelo = new DefaultTableModel(null, titulos);
         SQL = "SELECT municipio.idMunicipio,municipio.nombre,municipio.poblacion,provincia.nombre AS 'provincia'"
                 + "FROM provincia inner join municipio "
-                + "ON provincia.idProvincia = municipio.idProvincia";
+                + "ON provincia.idProvincia = municipio.idProvincia "
+                + "WHERE municipio.nombre LIKE '"+buscar+"%'";
         try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(SQL);
