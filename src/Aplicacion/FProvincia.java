@@ -21,9 +21,10 @@ public class FProvincia {
     
     /**
      * Método que retorna todos los registros de la tabla Provincias en un modelo DefaultTabkeModel
+     * @param buscar
      * @return modelo
      */
-    public DefaultTableModel mostrar(){
+    public DefaultTableModel mostrar(String buscar){
         DefaultTableModel modelo;
         String [] titulos ={"CODIGO","NOMBRE","DEPARTAMENTO"};
         String [] registro = new String[3];
@@ -31,14 +32,15 @@ public class FProvincia {
         modelo = new DefaultTableModel(null, titulos);
         SQL = "SELECT provincia.idProvincia, provincia.nombre, departamento.nombre as 'departamento'"
                 + "FROM departamento inner join provincia "
-                + "ON departamento.idDepartamento = provincia.idDepartamento";
+                + "ON departamento.idDepartamento = provincia.idDepartamento "
+                + "WHERE provincia.nombre LIKE '"+buscar+"%'";
         try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(SQL);
             while(rs.next()){
                 registro[0]=rs.getString("idProvincia");
                 registro[1]=rs.getString("nombre");
-                registro[2]=rs.getString("depto");
+                registro[2]=rs.getString("departamento");
                 totalRegistros++;
                 modelo.addRow(registro);
             }
