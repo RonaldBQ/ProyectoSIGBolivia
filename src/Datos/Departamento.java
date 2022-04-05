@@ -52,7 +52,7 @@ public class Departamento {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
-    
+
     
     
     
