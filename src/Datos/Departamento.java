@@ -21,6 +21,11 @@ public class Departamento {
         this.imagen = imagen;
     }
 
+    public Departamento(int idDepartamento, String nombre) {
+        this.idDepartamento = idDepartamento;
+        this.nombre = nombre;
+    }
+    
     public int getIdDepartamento() {
         return idDepartamento;
     }
@@ -51,6 +56,11 @@ public class Departamento {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    @Override
+    public String toString() {
+        return this.nombre;
     }
 
     

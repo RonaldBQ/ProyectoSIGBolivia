@@ -18,6 +18,11 @@ public class Provincia {
         this.nombre = nombre;
         this.idDepartamento = idDepartamento;
     }
+
+    public Provincia(int idProvincia, String nombre) {
+        this.idProvincia = idProvincia;
+        this.nombre = nombre;
+    }
     
     
     public int getIdProvincia() {
@@ -43,6 +48,12 @@ public class Provincia {
     public void setIdDepartamento(int idDepartamento) {
         this.idDepartamento = idDepartamento;
     }
+
+    @Override
+    public String toString() {
+        return this.nombre;
+    }
+    
     
     
 }
