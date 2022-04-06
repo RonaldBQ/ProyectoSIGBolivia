@@ -1,4 +1,3 @@
-
 package Presentacion;
 
 import static DBUtils.DBConexion.conectar;
@@ -15,7 +14,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     public PantallaPrincipal() {
         initComponents();
         super.setSize(X, Y);                             // Especifica un tamaño fijo de la ventana (1920x1024)
-        super.setLocationRelativeTo(null);   
+        super.setLocationRelativeTo(null);
         conectar();
     }
 
@@ -36,6 +35,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jMenuDepartamento = new javax.swing.JMenuItem();
         jMenuProvincia = new javax.swing.JMenuItem();
         jMenuMunicipio = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,11 +50,13 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
         ContenedorPrincipalLayout.setVerticalGroup(
             ContenedorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 583, Short.MAX_VALUE)
+            .addGap(0, 538, Short.MAX_VALUE)
         );
 
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/64icon-Inicio.png"))); // NOI18N
         jMenu1.setText("Inicio");
 
+        jMenuCerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/32cerrar_ventana.png"))); // NOI18N
         jMenuCerrar.setText("Cerrar Pantallas");
         jMenuCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -64,8 +67,10 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Tablas");
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/64icon-Datos.png"))); // NOI18N
+        jMenu2.setText("Datos");
 
+        jMenuDepartamento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/32icon-depto.png"))); // NOI18N
         jMenuDepartamento.setText("Departamentos");
         jMenuDepartamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -74,6 +79,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuDepartamento);
 
+        jMenuProvincia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/32icon-prov.png"))); // NOI18N
         jMenuProvincia.setText("Provincias");
         jMenuProvincia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,6 +88,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuProvincia);
 
+        jMenuMunicipio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/32icon-munic.png"))); // NOI18N
         jMenuMunicipio.setText("Municipios");
         jMenuMunicipio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,6 +98,14 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jMenu2.add(jMenuMunicipio);
 
         jMenuBar1.add(jMenu2);
+
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/64icon-reporte.png"))); // NOI18N
+        jMenu3.setText("Reportes");
+        jMenuBar1.add(jMenu3);
+
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/64icon-Info.png"))); // NOI18N
+        jMenu4.setText("Acerca de");
+        jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
 
@@ -115,9 +130,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             NombrejInternalFrame nombreObjeto = new NombrejInternalFrame();
             openWindow(nombreObjeto);
         Ejemplo:
-            JInternalFramePrueba ventanaPrueba = new JInternalFramePrueba();
-            openWindow(ventanaPrueba);
-        */
+         */
+        FrmDepartamentos ventanaDepartamento = new FrmDepartamentos();
+        openWindow(ventanaDepartamento);
     }//GEN-LAST:event_jMenuDepartamentoActionPerformed
 
     private void jMenuCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCerrarActionPerformed
@@ -125,7 +140,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuCerrarActionPerformed
 
     private void jMenuProvinciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuProvinciaActionPerformed
-          // Instancia tu Clase y agrega el siguiente método aqui para abrir tu jInternalFrame
+        // Instancia tu Clase y agrega el siguiente método aqui para abrir tu jInternalFrame
         /*
         Modelo:
             NombrejInternalFrame nombreObjeto = new NombrejInternalFrame();
@@ -133,11 +148,13 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Ejemplo:
             JInternalFramePrueba ventanaPrueba = new JInternalFramePrueba();
             openWindow(ventanaPrueba);
-        */
+         */
+        FrmProvincias ventanaProvincias = new FrmProvincias();
+        openWindow(ventanaProvincias);
     }//GEN-LAST:event_jMenuProvinciaActionPerformed
 
     private void jMenuMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMunicipioActionPerformed
-          // Instancia tu Clase y agrega el siguiente método aqui para abrir tu jInternalFrame
+        // Instancia tu Clase y agrega el siguiente método aqui para abrir tu jInternalFrame
         /*
         Modelo:
             NombrejInternalFrame nombreObjeto = new NombrejInternalFrame();
@@ -145,7 +162,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Ejemplo:
             JInternalFramePrueba ventanaPrueba = new JInternalFramePrueba();
             openWindow(ventanaPrueba);
-        */
+         */
+        FrmMunicipios ventanaMunicipio = new FrmMunicipios();
+        openWindow(ventanaMunicipio);
     }//GEN-LAST:event_jMenuMunicipioActionPerformed
 
     /**
@@ -187,6 +206,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     public static javax.swing.JDesktopPane ContenedorPrincipal;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCerrar;
     private javax.swing.JMenuItem jMenuDepartamento;
