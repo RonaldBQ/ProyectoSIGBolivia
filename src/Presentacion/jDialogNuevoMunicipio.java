@@ -1,32 +1,53 @@
 package Presentacion;
 
 import Aplicacion.FMunicipio;
+import Aplicacion.FProvincia;
 import Datos.Provincia;
 import Datos.Municipio;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class jDialogNuevoMunicipio extends javax.swing.JDialog {
 
-    DefaultComboBoxModel modelocboProvincia = new DefaultComboBoxModel();
+    DefaultTableModel modeloTablaProvincia = new DefaultTableModel();
     Provincia provSeleccionado = null;
+    FProvincia objProv = new FProvincia();
     FMunicipio objMunc = new FMunicipio();
 
     public jDialogNuevoMunicipio(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        cargarProvincias();
-        txtProvincia.requestFocus();
-        cboProv.setEnabled(false);
+        txtMunicipio.requestFocus();
+        generarTabla("");
     }
 
-    public final void cargarProvincias() {
-        modelocboProvincia = objMunc.cargarProvincia();
-        cboProv.setModel(modelocboProvincia);
+    public final void generarTabla(String nombre) {
+        modeloTablaProvincia = objProv.mostrar(nombre);
+        tblProvincias.setModel(modeloTablaProvincia);
+        tblProvincias.getColumnModel().getColumn(0).setMaxWidth(50);
+        ocultarComponentes();
+        inhabilitarComponentes();
+    }
+
+    public void ocultarComponentes() {
+        //Oculta la columna idDepartamento de la tabla
+        tblProvincias.getColumnModel().getColumn(2).setMaxWidth(0);
+        tblProvincias.getColumnModel().getColumn(2).setMinWidth(0);
+        tblProvincias.getTableHeader().getColumnModel().getColumn(2).setMaxWidth(0);
+        tblProvincias.getTableHeader().getColumnModel().getColumn(2).setMinWidth(0);
     }
 
     public void limpiaCampos() {
-        txtProvincia.setText(null);
+        txtMunicipio.setText(null);
+    }
+
+    public final void inhabilitarComponentes() {
+        //Botones
+        btnGuardar.setEnabled(false);
+
+        //Panel datos de la Provincia
+        txtIdProv.setEnabled(false);
+        txtProvincia.setEnabled(false);
     }
 
     /**
@@ -41,17 +62,23 @@ public class jDialogNuevoMunicipio extends javax.swing.JDialog {
         jPanel5 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        txtProvincia = new javax.swing.JTextField();
+        txtMunicipio = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        cboProv = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
         txtPoblacion = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txtLongitud = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        txtProvincia = new javax.swing.JTextField();
         txtLatitud = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        txtIdProv = new javax.swing.JTextField();
         btnGuardar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblProvincias = new javax.swing.JTable();
+        jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -62,38 +89,39 @@ public class jDialogNuevoMunicipio extends javax.swing.JDialog {
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel11.setText("NUEVO MUNICIPIO");
-        jPanel5.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, -1, -1));
+        jPanel5.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, -1, -1));
 
-        txtProvincia.addMouseListener(new java.awt.event.MouseAdapter() {
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        txtMunicipio.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtProvinciaMouseClicked(evt);
+                txtMunicipioMouseClicked(evt);
             }
         });
-        txtProvincia.addActionListener(new java.awt.event.ActionListener() {
+        txtMunicipio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtProvinciaActionPerformed(evt);
+                txtMunicipioActionPerformed(evt);
             }
         });
-        txtProvincia.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtMunicipio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtProvinciaKeyReleased(evt);
+                txtMunicipioKeyReleased(evt);
             }
         });
+        jPanel6.add(txtMunicipio, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 160, 35));
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel8.setText("Municipio:");
+        jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, 29));
 
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel15.setText("Provincia");
-
-        cboProv.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cboProvItemStateChanged(evt);
-            }
-        });
+        jLabel15.setText("Provincia:");
+        jPanel6.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 49, 29));
 
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel9.setText("Población:");
+        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, 29));
 
         txtPoblacion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -110,9 +138,11 @@ public class jDialogNuevoMunicipio extends javax.swing.JDialog {
                 txtPoblacionKeyReleased(evt);
             }
         });
+        jPanel6.add(txtPoblacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 70, 160, 35));
 
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel10.setText("Longitud:");
+        jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, 29));
 
         txtLongitud.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -129,9 +159,28 @@ public class jDialogNuevoMunicipio extends javax.swing.JDialog {
                 txtLongitudKeyReleased(evt);
             }
         });
+        jPanel6.add(txtLongitud, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 160, 35));
 
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel12.setText("Latitud:");
+        jPanel6.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, 29));
+
+        txtProvincia.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtProvinciaMouseClicked(evt);
+            }
+        });
+        txtProvincia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtProvinciaActionPerformed(evt);
+            }
+        });
+        txtProvincia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtProvinciaKeyReleased(evt);
+            }
+        });
+        jPanel6.add(txtProvincia, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, 160, 35));
 
         txtLatitud.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -148,61 +197,30 @@ public class jDialogNuevoMunicipio extends javax.swing.JDialog {
                 txtLatitudKeyReleased(evt);
             }
         });
+        jPanel6.add(txtLatitud, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, 160, 35));
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel8))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtLatitud)
-                    .addComponent(txtLongitud)
-                    .addComponent(txtPoblacion)
-                    .addComponent(txtProvincia)
-                    .addComponent(cboProv, 0, 200, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtProvincia, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPoblacion, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cboProv, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20))
-        );
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel16.setText("Id Prov:");
+        jPanel6.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 49, 29));
 
-        jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 320, 270));
+        txtIdProv.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtIdProvMouseClicked(evt);
+            }
+        });
+        txtIdProv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdProvActionPerformed(evt);
+            }
+        });
+        txtIdProv.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtIdProvKeyReleased(evt);
+            }
+        });
+        jPanel6.add(txtIdProv, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, 70, 35));
+
+        jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 280, 340));
 
         btnGuardar.setBackground(new java.awt.Color(0, 51, 153));
         btnGuardar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -213,53 +231,89 @@ public class jDialogNuevoMunicipio extends javax.swing.JDialog {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel5.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 360, 320, 40));
+        jPanel5.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 250, 40));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        tblProvincias.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblProvincias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProvinciasMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblProvincias);
+
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel13.setText("Seleccione la provincia");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        jPanel5.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 350, 420));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtProvinciaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtProvinciaMouseClicked
-        
-    }//GEN-LAST:event_txtProvinciaMouseClicked
+    private void txtMunicipioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtMunicipioMouseClicked
 
-    private void txtProvinciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProvinciaActionPerformed
+    }//GEN-LAST:event_txtMunicipioMouseClicked
 
-    }//GEN-LAST:event_txtProvinciaActionPerformed
+    private void txtMunicipioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMunicipioActionPerformed
 
-    private void cboProvItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboProvItemStateChanged
-        provSeleccionado = (Provincia) cboProv.getSelectedItem();
-       
-    }//GEN-LAST:event_cboProvItemStateChanged
+    }//GEN-LAST:event_txtMunicipioActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        
-        if (provSeleccionado == null) {
-            JOptionPane.showMessageDialog(rootPane, "Debe seleccionar la provincia");
+
+        if (txtMunicipio.getText().isEmpty() && txtIdProv.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Debe seleccionar una provincia de la tabla");
         } else {
             Municipio dts = new Municipio();
-            provSeleccionado.setNombre(cboProv.getSelectedItem().toString());
-            dts.setNombre(txtProvincia.getText());
+            dts.setNombre(txtMunicipio.getText());
             dts.setPoblacion(Integer.parseInt(txtPoblacion.getText()));
-            dts.setLatitud(Float.parseFloat(txtLatitud.getText()));
             dts.setLongitud(Float.parseFloat(txtLongitud.getText()));
-            dts.setIdProvincia(provSeleccionado.getIdProvincia());
+            dts.setLatitud(Float.parseFloat(txtLatitud.getText()));
+            dts.setIdProvincia(Integer.parseInt(txtIdProv.getText()));
             if (objMunc.insertarMunicipio(dts)) {
-               JOptionPane.showMessageDialog(rootPane, "Se registró el municipio correctamente");
+                JOptionPane.showMessageDialog(rootPane, "Se registró el municipio correctamente");
                 limpiaCampos();
                 this.dispose();
             } else {
@@ -267,13 +321,13 @@ public class jDialogNuevoMunicipio extends javax.swing.JDialog {
                 limpiaCampos();
                 this.dispose();
             }
-        }    
-       
+        }
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void txtProvinciaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProvinciaKeyReleased
-       cboProv.setEnabled(true);
-    }//GEN-LAST:event_txtProvinciaKeyReleased
+    private void txtMunicipioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMunicipioKeyReleased
+        btnGuardar.setEnabled(true);
+    }//GEN-LAST:event_txtMunicipioKeyReleased
 
     private void txtPoblacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPoblacionMouseClicked
         // TODO add your handling code here:
@@ -299,6 +353,18 @@ public class jDialogNuevoMunicipio extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLongitudKeyReleased
 
+    private void txtProvinciaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtProvinciaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtProvinciaMouseClicked
+
+    private void txtProvinciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProvinciaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtProvinciaActionPerformed
+
+    private void txtProvinciaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProvinciaKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtProvinciaKeyReleased
+
     private void txtLatitudMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtLatitudMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLatitudMouseClicked
@@ -311,23 +377,48 @@ public class jDialogNuevoMunicipio extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLatitudKeyReleased
 
-/**
- * @param args the command line arguments
- */
+    private void txtIdProvMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtIdProvMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdProvMouseClicked
+
+    private void txtIdProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdProvActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdProvActionPerformed
+
+    private void txtIdProvKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdProvKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdProvKeyReleased
+
+    private void tblProvinciasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProvinciasMouseClicked
+        int filaSeleccionada = tblProvincias.rowAtPoint(evt.getPoint());
+
+        txtIdProv.setText((String) tblProvincias.getValueAt(filaSeleccionada, 0));
+        txtProvincia.setText((String) tblProvincias.getValueAt(filaSeleccionada, 1));
+    }//GEN-LAST:event_tblProvinciasMouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JComboBox cboProv;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblProvincias;
+    private javax.swing.JTextField txtIdProv;
     private javax.swing.JTextField txtLatitud;
     private javax.swing.JTextField txtLongitud;
+    private javax.swing.JTextField txtMunicipio;
     private javax.swing.JTextField txtPoblacion;
     private javax.swing.JTextField txtProvincia;
     // End of variables declaration//GEN-END:variables
