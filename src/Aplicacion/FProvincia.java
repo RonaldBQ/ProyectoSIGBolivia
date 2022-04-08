@@ -36,7 +36,8 @@ public class FProvincia {
         String SQL = "SELECT provincia.idProvincia, provincia.nombre, departamento.idDepartamento, departamento.nombre as 'departamento'"
                 + "FROM departamento inner join provincia "
                 + "ON departamento.idDepartamento = provincia.idDepartamento "
-                + "WHERE provincia.nombre LIKE '"+buscar+"%'";
+                + "WHERE provincia.nombre LIKE '"+buscar+"%'"
+                + "ORDER BY provincia.idProvincia DESC";
         try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(SQL);
