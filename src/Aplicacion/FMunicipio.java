@@ -33,9 +33,10 @@ public class FMunicipio {
         totalRegistros = 0;
         modelo = new DefaultTableModel(null, titulos);
         String SQL = "SELECT municipio.idMunicipio,municipio.nombre,municipio.poblacion,municipio.latitud,municipio.longitud,provincia.idProvincia, provincia.nombre AS 'provincia'"
-                + "FROM provincia inner join municipio "
+                + "FROM provincia left join municipio "
                 + "ON provincia.idProvincia = municipio.idProvincia "
-                + "WHERE municipio.nombre LIKE '"+buscar+"%'";
+                + "WHERE municipio.nombre LIKE '"+buscar+"%' "
+                + "ORDER BY municipio.idMunicipio DESC";
         try {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(SQL);
