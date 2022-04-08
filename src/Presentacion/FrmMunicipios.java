@@ -432,8 +432,8 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
         txtId.setText((String) tblMunicipios.getValueAt(filaSeleccionada, 0));
         txtNombreMunicipio.setText((String) tblMunicipios.getValueAt(filaSeleccionada, 1));
         txtPoblacion.setText((String) tblMunicipios.getValueAt(filaSeleccionada, 2));
-        txtIdProv.setText((String) tblMunicipios.getValueAt(filaSeleccionada, 3));
-        txtProvincia.setText((String) tblMunicipios.getValueAt(filaSeleccionada, 4));
+        txtIdProv.setText((String) tblMunicipios.getValueAt(filaSeleccionada, 5));
+        txtProvincia.setText((String) tblMunicipios.getValueAt(filaSeleccionada, 6));
     }//GEN-LAST:event_tblMunicipiosMouseClicked
 
     private void cboProvinciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboProvinciaActionPerformed
