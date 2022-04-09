@@ -44,7 +44,9 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
         tblMunicipios.getColumnModel().getColumn(5).setMinWidth(0);
         tblMunicipios.getTableHeader().getColumnModel().getColumn(5).setMaxWidth(0);
         tblMunicipios.getTableHeader().getColumnModel().getColumn(5).setMinWidth(0);
+
         cboProvincia.setVisible(false);
+        btnCambiarProv.setVisible(false);
     }
 
     public void limpiaCampos() {
@@ -60,6 +62,7 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
         //Botones
         btnEliminar.setEnabled(false);
         btnEditar.setEnabled(false);
+        btnCambiarProv.setEnabled(false);
 
         //Panel datos de la Provincia
         txtId.setEnabled(false);
@@ -107,9 +110,11 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
         txtPoblacion = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         btnEliminar = new javax.swing.JButton();
+        btnCambiarProv = new javax.swing.JButton();
         lblTitulo = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tblMunicipios.setModel(new javax.swing.table.DefaultTableModel(
@@ -130,7 +135,7 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblMunicipios);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 700, 370));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 690, 370));
 
         btnNuevo.setBackground(new java.awt.Color(0, 51, 153));
         btnNuevo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -141,7 +146,7 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
                 btnNuevoActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 10, 280, 40));
+        jPanel1.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 20, 280, 40));
 
         btnEditar.setBackground(new java.awt.Color(51, 153, 0));
         btnEditar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -152,12 +157,13 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
                 btnEditarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 60, 280, 40));
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 70, 280, 40));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setText("Buscar municipio:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, -1));
 
+        txtBuscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarKeyReleased(evt);
@@ -178,7 +184,7 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
                 btnActualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 20, 170, 40));
+        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 20, 160, 40));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -242,6 +248,16 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
             }
         });
 
+        btnCambiarProv.setBackground(new java.awt.Color(51, 102, 255));
+        btnCambiarProv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCambiarProv.setForeground(new java.awt.Color(255, 255, 255));
+        btnCambiarProv.setText("Cambiar Provincia");
+        btnCambiarProv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarProvActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -249,21 +265,20 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCambiarProv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtId))
-                    .addComponent(cboProvincia, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtIdProv, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabel9))
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addComponent(txtProvincia, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtProvincia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11)
@@ -275,7 +290,7 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
                                     .addGap(142, 142, 142))
                                 .addComponent(txtNombreMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cboProvincia, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -304,13 +319,15 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
                     .addComponent(txtProvincia, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtIdProv, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(cboProvincia, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(btnCambiarProv)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cboProvincia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addContainerGap())
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 110, 280, 430));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 120, 280, 440));
 
         lblTitulo.setBackground(new java.awt.Color(255, 255, 255));
         lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
@@ -345,7 +362,7 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
                     .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
         );
 
         pack();
@@ -363,7 +380,23 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-
+        if(!txtId.getText().isEmpty()){
+            int conf = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro de eliminar este registro?");
+            if (conf == 0) {
+                Municipio dts = new Municipio();
+                dts.setIdMunicipio(Integer.parseInt(txtId.getText()));
+                if (objMunc.eliminarMunicipio(dts)) {
+                    JOptionPane.showMessageDialog(rootPane, "Se ha eliminado el Municipio");
+                    btnEliminar.setEnabled(false);
+                    limpiaCampos();
+                    //Resetea algunos parametros
+                    btnEditar.setEnabled(false);
+                    generarTabla("");
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "No se pudo eliminar", "Error", ERROR);
+                }
+            }
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -387,9 +420,9 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
         } else {
             //Habilita componentes
             txtNombreMunicipio.setEnabled(true);
-            cboProvincia.setVisible(true);
             txtNombreMunicipio.requestFocus();
-            cboProvincia.setEnabled(true);
+            btnCambiarProv.setVisible(true);
+            btnCambiarProv.setEnabled(true);
             txtPoblacion.setEnabled(true);
             cargarProvincias();
             //Deshabilita componentes
@@ -444,9 +477,15 @@ public class FrmMunicipios extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPoblacionActionPerformed
 
+    private void btnCambiarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarProvActionPerformed
+        cboProvincia.setVisible(true);
+        cboProvincia.setEnabled(true);
+    }//GEN-LAST:event_btnCambiarProvActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnCambiarProv;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;

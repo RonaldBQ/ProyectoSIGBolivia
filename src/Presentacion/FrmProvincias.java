@@ -45,6 +45,7 @@ public class FrmProvincias extends javax.swing.JInternalFrame {
         tblProvincias.getTableHeader().getColumnModel().getColumn(2).setMinWidth(0);
         //Oculta el CboDepartamento
         cboDepartamento.setVisible(false);
+        btnCambiarProv.setVisible(false);
     }
 
     public void limpiaCampos() {
@@ -59,6 +60,7 @@ public class FrmProvincias extends javax.swing.JInternalFrame {
         //Botones
         btnEliminar.setEnabled(false);
         btnEditar.setEnabled(false);
+        btnCambiarProv.setEnabled(false);
 
         //Panel datos de la Provincia
         txtId.setEnabled(false);
@@ -104,10 +106,12 @@ public class FrmProvincias extends javax.swing.JInternalFrame {
         txtNombreProvincia = new javax.swing.JTextField();
         txtIdDepto = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        btnCambiarProv = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
         lblTitulo = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tblProvincias.setModel(new javax.swing.table.DefaultTableModel(
@@ -153,6 +157,7 @@ public class FrmProvincias extends javax.swing.JInternalFrame {
         jLabel2.setText("Buscar provincias:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, -1));
 
+        txtBuscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarKeyReleased(evt);
@@ -212,6 +217,16 @@ public class FrmProvincias extends javax.swing.JInternalFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setText("Id Dpto");
 
+        btnCambiarProv.setBackground(new java.awt.Color(51, 102, 255));
+        btnCambiarProv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCambiarProv.setForeground(new java.awt.Color(255, 255, 255));
+        btnCambiarProv.setText("Cambiar Departamento");
+        btnCambiarProv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarProvActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -241,7 +256,8 @@ public class FrmProvincias extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addComponent(txtDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnCambiarProv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -266,11 +282,13 @@ public class FrmProvincias extends javax.swing.JInternalFrame {
                     .addComponent(txtDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtIdDepto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cboDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addComponent(btnCambiarProv)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(cboDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 80, 280, 300));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 80, 280, 320));
 
         btnNuevo.setBackground(new java.awt.Color(0, 51, 153));
         btnNuevo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -334,7 +352,23 @@ public class FrmProvincias extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-
+        if (!txtId.getText().isEmpty()) {
+            int conf = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro de eliminar este registro?");
+            if (conf == 0) {
+                Provincia dts = new Provincia();
+                dts.setIdProvincia(Integer.parseInt(txtId.getText()));
+                if (objProv.eliminarProvincia(dts)) {
+                    JOptionPane.showMessageDialog(rootPane, "Se ha eliminado el Provincia");
+                    btnEliminar.setEnabled(false);
+                    limpiaCampos();
+                    //Resetea algunos parametros
+                    btnEditar.setEnabled(false);
+                    generarTabla("");
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "No se pudo eliminar", "Error", ERROR);
+                }
+            }
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -354,9 +388,9 @@ public class FrmProvincias extends javax.swing.JInternalFrame {
         } else {
             //Habilita componentes
             txtNombreProvincia.setEnabled(true);
-            cboDepartamento.setVisible(true);
             txtNombreProvincia.requestFocus();
-            cboDepartamento.setEnabled(true);
+            btnCambiarProv.setEnabled(true);
+            btnCambiarProv.setVisible(true);
             cargarDepartamentos();
             //Deshabilita componentes
             btnActualizar.setEnabled(false);
@@ -402,9 +436,15 @@ public class FrmProvincias extends javax.swing.JInternalFrame {
         txtDepartamento.setText(nombreDpto);
     }//GEN-LAST:event_cboDepartamentoItemStateChanged
 
+    private void btnCambiarProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarProvActionPerformed
+        cboDepartamento.setVisible(true);
+        cboDepartamento.setEnabled(true);
+    }//GEN-LAST:event_btnCambiarProvActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnCambiarProv;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;

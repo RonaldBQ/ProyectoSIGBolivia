@@ -6,6 +6,8 @@
 package Presentacion;
 
 import Aplicacion.FDepartamento;
+import Datos.Departamento;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,7 +32,7 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         ImagenTitulo.setText(String.valueOf(objDpto.totalRegistros) + " departamentos en total");
         tblDepartamentos.setModel(modelo);
         tblDepartamentos.getColumnModel().getColumn(0).setMaxWidth(60);
-        tblDepartamentos.setRowHeight(20);
+        tblDepartamentos.setRowHeight(35);
         ocultarCampos();
     }
 
@@ -41,10 +43,21 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         tblDepartamentos.getTableHeader().getColumnModel().getColumn(3).setMaxWidth(0);
         tblDepartamentos.getTableHeader().getColumnModel().getColumn(3).setMinWidth(0);
     }
-    
-    public void inhabilitarComponentes(){
+
+    public void limpiaCampos() {
+        txtNombreDepartamento.setText("");
+        txtId.setText("");
+        txtSuperficie.setText("");
+        txtURLImagen.setText("");
+    }
+
+    public final void inhabilitarComponentes() {
         btnBorrar.setEnabled(false);
         btnEditar.setEnabled(false);
+        txtId.setEnabled(false);
+        txtNombreDepartamento.setEnabled(false);
+        txtSuperficie.setEnabled(false);
+        txtURLImagen.setEnabled(false);
     }
 
     /**
@@ -59,7 +72,6 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDepartamentos = new javax.swing.JTable();
-        btnNuevo = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
@@ -76,13 +88,16 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         txtSuperficie = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtNombreDepartamento = new javax.swing.JTextField();
+        btnEditar = new javax.swing.JButton();
+        btnInsertar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         txtURLImagen = new javax.swing.JTextField();
-        btnInsertar = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tblDepartamentos.setModel(new javax.swing.table.DefaultTableModel(
@@ -103,65 +118,55 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblDepartamentos);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 690, 140));
-
-        btnNuevo.setBackground(new java.awt.Color(0, 51, 153));
-        btnNuevo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
-        btnNuevo.setText("Agregar");
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 400, 280, 40));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 80, 360, 410));
 
         btnBorrar.setBackground(new java.awt.Color(153, 0, 0));
         btnBorrar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBorrar.setForeground(new java.awt.Color(255, 255, 255));
-        btnBorrar.setText("Borrar");
+        btnBorrar.setText("Borrar Departamento");
         btnBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 460, 280, 40));
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 430, 250, 40));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setText("Buscar departamento:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, -1));
 
+        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField4KeyReleased(evt);
             }
         });
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 280, 40));
+        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, 360, 40));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         lblImagenDpto.setBackground(new java.awt.Color(102, 102, 102));
-        lblImagenDpto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/Bolivia.jpg"))); // NOI18N
+        lblImagenDpto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/Bolivia.png"))); // NOI18N
         lblImagenDpto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        lblImagenDpto.setMaximumSize(new java.awt.Dimension(256, 256));
+        lblImagenDpto.setPreferredSize(new java.awt.Dimension(256, 256));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addComponent(lblImagenDpto, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(lblImagenDpto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(lblImagenDpto, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 80, -1, 280));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 80, 250, -1));
 
         btnActualizar.setBackground(new java.awt.Color(51, 153, 0));
         btnActualizar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -172,33 +177,41 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
                 btnActualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 20, 170, 40));
+        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 20, 250, 40));
 
         ImagenTitulo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         ImagenTitulo.setText("Total Registros");
-        jPanel1.add(ImagenTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
+        jPanel1.add(ImagenTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 500, -1, -1));
 
         lblRegistros1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblRegistros1.setText("Imagen");
-        jPanel1.add(lblRegistros1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 40, -1, 20));
+        jPanel1.add(lblRegistros1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 340, -1, 20));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(51, 0, 153));
         jLabel11.setText("Datos del departamento");
+        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 21, -1, -1));
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel7.setText("Id Depto:");
+        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, -1, -1));
 
         txtId.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel3.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, 67, 30));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("Nombre Departamento:");
+        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, 20));
 
         txtSuperficie.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel3.add(txtSuperficie, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 290, 30));
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel8.setText("Superficie");
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel8.setText("Superficie:");
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, -1));
 
         txtNombreDepartamento.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         txtNombreDepartamento.addActionListener(new java.awt.event.ActionListener() {
@@ -206,11 +219,18 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
                 txtNombreDepartamentoActionPerformed(evt);
             }
         });
+        jPanel3.add(txtNombreDepartamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 290, 30));
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel9.setText("Imagen");
-
-        txtURLImagen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnEditar.setBackground(new java.awt.Color(51, 153, 0));
+        btnEditar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnEditar.setForeground(new java.awt.Color(255, 255, 255));
+        btnEditar.setText("Editar Seleccionado");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 290, 40));
 
         btnInsertar.setBackground(new java.awt.Color(102, 102, 102));
         btnInsertar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -221,89 +241,20 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
                 btnInsertarActionPerformed(evt);
             }
         });
+        jPanel3.add(btnInsertar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, 140, 30));
 
-        btnEditar.setBackground(new java.awt.Color(51, 153, 0));
-        btnEditar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnEditar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEditar.setText("Editar");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel9.setText("Imagen:");
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, -1));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jLabel7)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel6)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtNombreDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel8)
-                                        .addComponent(txtSuperficie, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(27, 27, 27)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel9)
-                                        .addGroup(jPanel3Layout.createSequentialGroup()
-                                            .addComponent(txtURLImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(btnInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(190, 190, 190)
-                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(73, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel11)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(txtNombreDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(41, 41, 41))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(7, 7, 7)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtURLImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSuperficie, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
+        txtURLImagen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel3.add(txtURLImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 290, 30));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 690, 250));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 320, 470));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 51, 153));
         jLabel1.setText("Departamentos");
 
         btnCerrar.setBackground(new java.awt.Color(153, 0, 0));
@@ -325,17 +276,21 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21))
+                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCerrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -345,22 +300,61 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-
+        if(!txtId.getText().isEmpty()){
+            int conf = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro de eliminar este registro?");
+            if (conf == 0) {
+                Departamento dts = new Departamento();
+                dts.setIdDepartamento(Integer.parseInt(txtId.getText()));
+                if (objDpto.eliminarDepartamento(dts)) {
+                    JOptionPane.showMessageDialog(rootPane, "Se ha eliminado el Departamento");
+                    btnBorrar.setEnabled(false);
+                    limpiaCampos();
+                    //Resetea algunos parametros
+                    btnEditar.setEnabled(false);
+                    generarTabla("");
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "No se pudo eliminar", "Error", ERROR);
+                }
+            }
+        }
     }//GEN-LAST:event_btnBorrarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
 
+        if ("Guardar Cambios".equals(btnEditar.getText())) {
+            Departamento dts = new Departamento();
+
+            dts.setNombre(txtNombreDepartamento.getText());
+            dts.setSuperficie(Float.parseFloat(txtSuperficie.getText()));
+            dts.setImagen(txtURLImagen.getText());
+            dts.setIdDepartamento(Integer.parseInt(txtId.getText()));
+            if (objDpto.editarDepartamento(dts)) {
+                JOptionPane.showMessageDialog(null, "Se ha editado el registro exitosamente");
+                btnEditar.setText("Editar Seleccionado");
+                limpiaCampos();
+                generarTabla("");
+            } else {
+                JOptionPane.showMessageDialog(null, "Ups, no se ha podido editar");
+            }
+        } else {
+            //Habilita componentes
+            txtNombreDepartamento.requestFocus();
+            txtNombreDepartamento.setEnabled(true);
+            txtSuperficie.setEnabled(true);
+            //Deshabilita componentes
+            btnActualizar.setEnabled(false);
+            btnBorrar.setEnabled(false);
+            //Edita el texto del boton Editar
+            btnEditar.setText("Guardar Cambios");
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        //actualizarTabla();
         inhabilitarComponentes();
         generarTabla("");
+        limpiaCampos();
+        lblImagenDpto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/Bolivia.png")));
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
@@ -376,6 +370,12 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         txtNombreDepartamento.setText((String) tblDepartamentos.getValueAt(filaSeleccionada, 1));
         txtSuperficie.setText((String) tblDepartamentos.getValueAt(filaSeleccionada, 2));
         txtURLImagen.setText((String) tblDepartamentos.getValueAt(filaSeleccionada, 3));
+        if (txtURLImagen.getText() != null) {
+            lblImagenDpto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/" + txtURLImagen.getText())));
+        } else {
+            lblImagenDpto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/imageNull.png")));
+        }
+
     }//GEN-LAST:event_tblDepartamentosMouseClicked
 
     private void txtNombreDepartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreDepartamentoActionPerformed
@@ -394,7 +394,6 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnInsertar;
-    private javax.swing.JButton btnNuevo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
