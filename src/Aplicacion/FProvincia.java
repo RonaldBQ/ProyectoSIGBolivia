@@ -120,4 +120,25 @@ public class FProvincia {
         }
         return status;
     }
+    
+    public boolean eliminarProvincia(Provincia dts) {
+        boolean status = false;
+        int result;
+        String SQL = "DELETE FROM provincia WHERE idProvincia=?";
+        try {
+            PreparedStatement pst = cn.prepareStatement(SQL);
+            pst.setInt(1, dts.getIdProvincia());
+            result = pst.executeUpdate();
+            if (result != 0) {
+                status = true;
+                System.out.println("El registro ha sido eliminado correctamente");
+            } else {
+                status = false;
+                JOptionPane.showMessageDialog(null, "No se pudo eliminae el registro \n Error en sintaxis SQL");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        return status;
+    }
 }

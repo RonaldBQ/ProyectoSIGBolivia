@@ -3,8 +3,6 @@ package Aplicacion;
 import DBUtils.DBConexion;
 import Datos.Departamento;
 import java.sql.*;
-import java.util.ArrayList;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -49,10 +47,10 @@ public class FDepartamento {
         }
     }
 
-    public boolean editarProvincia(Departamento dts) {
+    public boolean editarDepartamento(Departamento dts) {
         boolean status = false;
         int result;
-        String SQL = "UPDATE departamento SET nombre=?,superficie=?,imagen=?"
+        String SQL = "UPDATE departamento SET nombre=?,superficie=?,imagen=? "
                 + "WHERE idDepartamento=?";
         try {
             PreparedStatement pst = cn.prepareStatement(SQL);
@@ -67,6 +65,27 @@ public class FDepartamento {
             } else {
                 status = false;
                 JOptionPane.showMessageDialog(null, "No se pudo editar el registro \n Error en sintaxis SQL");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        return status;
+    }
+    
+    public boolean eliminarDepartamento(Departamento dts) {
+        boolean status = false;
+        int result;
+        String SQL = "DELETE FROM departamento WHERE idDepartamento=?";
+        try {
+            PreparedStatement pst = cn.prepareStatement(SQL);
+            pst.setInt(1, dts.getIdDepartamento());
+            result = pst.executeUpdate();
+            if (result != 0) {
+                status = true;
+                System.out.println("El registro ha sido eliminado correctamente");
+            } else {
+                status = false;
+                JOptionPane.showMessageDialog(null, "No se pudo eliminae el registro \n Error en sintaxis SQL");
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);

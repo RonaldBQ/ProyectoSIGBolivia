@@ -127,4 +127,25 @@ public class FMunicipio {
         return status;
     }
     
+    public boolean eliminarMunicipio(Municipio dts) {
+        boolean status = false;
+        int result;
+        String SQL = "DELETE FROM municipio WHERE idMunicipio=?";
+        try {
+            PreparedStatement pst = cn.prepareStatement(SQL);
+            pst.setInt(1, dts.getIdMunicipio());
+            result = pst.executeUpdate();
+            if (result != 0) {
+                status = true;
+                System.out.println("El registro ha sido eliminado correctamente");
+            } else {
+                status = false;
+                JOptionPane.showMessageDialog(null, "No se pudo eliminae el registro \n Error en sintaxis SQL");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        return status;
+    }
+    
 }
