@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * @author Ronald Bautista
+ * @author Ronald Bautista, Rosa Gisela, Noelia
  */
 public class FDepartamento {
 
@@ -24,8 +24,8 @@ public class FDepartamento {
      */
     public DefaultTableModel mostrar(String buscar) {
         DefaultTableModel modelo;
-        String[] titulos = {"CODIGO", "NOMBRE", "SUPERFICIE", "IMAGEN"};
-        String[] registro = new String[4];
+        String[] titulos = {"CODIGO", "NOMBRE", "SUPERFICIE", "IMAGEN POLITICO","IMAGEN HIDRO"};
+        String[] registro = new String[5];
         totalRegistros = 0;
         modelo = new DefaultTableModel(null, titulos);
         String SQL = "SELECT * FROM departamento WHERE nombre LIKE '" + buscar + "%'";
@@ -37,6 +37,7 @@ public class FDepartamento {
                 registro[1] = rs.getString("nombre");
                 registro[2] = rs.getString("superficie");
                 registro[3] = rs.getString("imagen");
+                registro[4] = rs.getString("imagenDeptoHidro");
                 totalRegistros++;
                 modelo.addRow(registro);
             }
@@ -50,14 +51,15 @@ public class FDepartamento {
     public boolean editarDepartamento(Departamento dts) {
         boolean status = false;
         int result;
-        String SQL = "UPDATE departamento SET nombre=?,superficie=?,imagen=? "
+        String SQL = "UPDATE departamento SET nombre=?,superficie=?,imagen=?,imagenDeptoHidro=? "
                 + "WHERE idDepartamento=?";
         try {
             PreparedStatement pst = cn.prepareStatement(SQL);
             pst.setString(1, dts.getNombre());
             pst.setFloat(2, dts.getSuperficie());
             pst.setString(3, dts.getImagen());
-            pst.setInt(4, dts.getIdDepartamento());
+            pst.setString(4, dts.getImagenDeptoHidro());
+            pst.setInt(5, dts.getIdDepartamento());
             result = pst.executeUpdate();
             if (result != 0) {
                 status = true;
