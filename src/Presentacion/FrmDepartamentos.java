@@ -7,7 +7,17 @@ package Presentacion;
 
 import Aplicacion.FDepartamento;
 import Datos.Departamento;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,6 +27,15 @@ import javax.swing.table.DefaultTableModel;
 public class FrmDepartamentos extends javax.swing.JInternalFrame {
 
     FDepartamento objDpto = new FDepartamento();
+    File archivo;
+    private int filaSeleccionada;
+    private String tipoMapa;
+    private String urlImgPolitico;
+    private String urlImgHidrografico;
+    protected final String DIRECTORIO = "src/Archivos/";
+    protected String imagen;
+    protected String rutaDestino;
+    protected String rutaOrigen;
 
     /**
      * Creates new form Departamentos
@@ -25,11 +44,12 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         initComponents();
         generarTabla("");
         inhabilitarComponentes();
+
     }
 
     public final void generarTabla(String nombre) {
         DefaultTableModel modelo = objDpto.mostrar(nombre);
-        ImagenTitulo.setText(String.valueOf(objDpto.totalRegistros) + " departamentos en total");
+        lblRegistros.setText(String.valueOf(objDpto.totalRegistros) + " departamentos en total");
         tblDepartamentos.setModel(modelo);
         tblDepartamentos.getColumnModel().getColumn(0).setMaxWidth(60);
         tblDepartamentos.setRowHeight(35);
@@ -38,26 +58,84 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
 
     public void ocultarCampos() {
         //Oculta el campo "Imagen"
+        /*
         tblDepartamentos.getColumnModel().getColumn(3).setMaxWidth(0);
         tblDepartamentos.getColumnModel().getColumn(3).setMinWidth(0);
         tblDepartamentos.getTableHeader().getColumnModel().getColumn(3).setMaxWidth(0);
         tblDepartamentos.getTableHeader().getColumnModel().getColumn(3).setMinWidth(0);
+         */
     }
 
     public void limpiaCampos() {
         txtNombreDepartamento.setText("");
         txtId.setText("");
         txtSuperficie.setText("");
-        txtURLImagen.setText("");
+        txtImagen.setText("");
     }
 
     public final void inhabilitarComponentes() {
+        btnTipoMapa.setEnabled(false);
         btnBorrar.setEnabled(false);
         btnEditar.setEnabled(false);
+        //btnSubirHidro.setEnabled(false);
         txtId.setEnabled(false);
         txtNombreDepartamento.setEnabled(false);
         txtSuperficie.setEnabled(false);
-        txtURLImagen.setEnabled(false);
+        txtImagen.setEnabled(false);
+        jTabbedPane1.setEnabledAt(1, false);
+    }
+
+    public void subirImagen() {
+        File origen = new File(this.rutaOrigen);
+        File destino = new File(this.rutaDestino);
+        try {
+            InputStream in = new FileInputStream(origen);
+            OutputStream out = new FileOutputStream(destino);
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+        } catch (IOException ioe) {
+            JOptionPane.showMessageDialog(this, ioe.getMessage());
+        }
+    }
+
+    public void verImagen(String nombreArchivo) {
+        if (nombreArchivo != null) {
+            ImageIcon img = new ImageIcon(this.DIRECTORIO + nombreArchivo);
+            lblImagenDpto.setIcon(img);
+        } else {
+            lblImagenDpto.setIcon(null);
+        }
+
+    }
+
+    public void ventanaSubirImagen() {
+        JFileChooser file = new JFileChooser(); //creamos el objeto JFileChooser
+        //Se crea el filtro para extensiones de solo imagen
+        FileNameExtensionFilter filtroImagen = new FileNameExtensionFilter("JPG y PNG", "jpg", "png");
+        file.setFileFilter(filtroImagen);
+
+        int seleccion = file.showOpenDialog(this); //abrimos la ventana
+        if (seleccion == JFileChooser.APPROVE_OPTION) //si el usuario da en aceptar 
+        {
+            imagen = file.getSelectedFile().getName();
+            rutaOrigen = file.getSelectedFile().getAbsolutePath();
+            rutaDestino = this.DIRECTORIO + this.imagen;
+
+            ImageIcon img = new ImageIcon(this.rutaOrigen);
+            Icon icono = new ImageIcon(img.getImage());
+            lblImagenDpto.setIcon(icono);
+
+            txtImagen.setText(this.imagen); //escribe la ruta del archivo seleccionado en el text
+            try {
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
     }
 
     /**
@@ -70,16 +148,17 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblDepartamentos = new javax.swing.JTable();
-        btnBorrar = new javax.swing.JButton();
+        btnTipoMapa = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         lblImagenDpto = new javax.swing.JLabel();
-        btnActualizar = new javax.swing.JButton();
-        ImagenTitulo = new javax.swing.JLabel();
-        lblRegistros1 = new javax.swing.JLabel();
+        btnBorrar = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel4 = new javax.swing.JPanel();
+        lblRegistros = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDepartamentos = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -88,17 +167,81 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         txtSuperficie = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtNombreDepartamento = new javax.swing.JTextField();
+        lblTipoImagen = new javax.swing.JLabel();
+        txtImagen = new javax.swing.JTextField();
+        btnCargarImagen = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        btnInsertar = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        txtURLImagen = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnTipoMapa.setBackground(new java.awt.Color(255, 255, 204));
+        btnTipoMapa.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnTipoMapa.setForeground(new java.awt.Color(51, 51, 51));
+        btnTipoMapa.setText("Mapa Politico");
+        btnTipoMapa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTipoMapaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnTipoMapa, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 390, 260, 30));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel2.setText("Buscar departamento:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
+        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
+        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 10, 280, 40));
+
+        lblImagenDpto.setBackground(new java.awt.Color(102, 102, 102));
+        lblImagenDpto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblImagenDpto.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(lblImagenDpto, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblImagenDpto, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 110, -1, 250));
+
+        btnBorrar.setBackground(new java.awt.Color(153, 0, 0));
+        btnBorrar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnBorrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBorrar.setText("Borrar Departamento");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 480, 260, 40));
+
+        jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblRegistros.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblRegistros.setText("Total Registros");
 
         tblDepartamentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -118,74 +261,28 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblDepartamentos);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 80, 360, 410));
-
-        btnBorrar.setBackground(new java.awt.Color(153, 0, 0));
-        btnBorrar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnBorrar.setForeground(new java.awt.Color(255, 255, 255));
-        btnBorrar.setText("Borrar Departamento");
-        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBorrarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 430, 250, 40));
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel2.setText("Buscar departamento:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, -1));
-
-        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField4KeyReleased(evt);
-            }
-        });
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, 360, 40));
-
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
-        lblImagenDpto.setBackground(new java.awt.Color(102, 102, 102));
-        lblImagenDpto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/Bolivia.png"))); // NOI18N
-        lblImagenDpto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        lblImagenDpto.setMaximumSize(new java.awt.Dimension(256, 256));
-        lblImagenDpto.setPreferredSize(new java.awt.Dimension(256, 256));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(lblImagenDpto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblRegistros)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 685, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(lblImagenDpto, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblRegistros)
+                .addGap(18, 18, 18))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 80, 250, -1));
-
-        btnActualizar.setBackground(new java.awt.Color(51, 153, 0));
-        btnActualizar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnActualizar.setForeground(new java.awt.Color(255, 255, 255));
-        btnActualizar.setText("Actualizar");
-        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActualizarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 20, 250, 40));
-
-        ImagenTitulo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        ImagenTitulo.setText("Total Registros");
-        jPanel1.add(ImagenTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 500, -1, -1));
-
-        lblRegistros1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblRegistros1.setText("Imagen");
-        jPanel1.add(lblRegistros1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 340, -1, 20));
+        jTabbedPane1.addTab("Registros", jPanel4);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -193,25 +290,25 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(51, 0, 153));
         jLabel11.setText("Datos del departamento");
-        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 21, -1, -1));
+        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel7.setText("Id Depto:");
-        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, -1, -1));
+        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 50, -1, -1));
 
         txtId.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel3.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, 67, 30));
+        jPanel3.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 50, 67, 30));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("Nombre Departamento:");
-        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, 20));
+        jPanel3.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, -1, 20));
 
         txtSuperficie.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel3.add(txtSuperficie, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 290, 30));
+        jPanel3.add(txtSuperficie, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 160, 290, 30));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel8.setText("Superficie:");
-        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, -1));
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 130, -1, -1));
 
         txtNombreDepartamento.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         txtNombreDepartamento.addActionListener(new java.awt.event.ActionListener() {
@@ -219,7 +316,29 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
                 txtNombreDepartamentoActionPerformed(evt);
             }
         });
-        jPanel3.add(txtNombreDepartamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 290, 30));
+        jPanel3.add(txtNombreDepartamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 290, 30));
+
+        lblTipoImagen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblTipoImagen.setText("Imagen ");
+        jPanel3.add(lblTipoImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 240, -1, -1));
+
+        txtImagen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel3.add(txtImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 270, 290, 30));
+
+        btnCargarImagen.setBackground(new java.awt.Color(255, 204, 0));
+        btnCargarImagen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnCargarImagen.setForeground(new java.awt.Color(51, 51, 51));
+        btnCargarImagen.setText("Subir Imagen");
+        btnCargarImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargarImagenActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnCargarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 320, 140, 30));
+
+        jTabbedPane1.addTab("Mantenimiento", jPanel3);
+
+        jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 720, 480));
 
         btnEditar.setBackground(new java.awt.Color(51, 153, 0));
         btnEditar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -230,27 +349,10 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
                 btnEditarActionPerformed(evt);
             }
         });
-        jPanel3.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 290, 40));
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, 200, 40));
 
-        btnInsertar.setBackground(new java.awt.Color(102, 102, 102));
-        btnInsertar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnInsertar.setForeground(new java.awt.Color(255, 255, 255));
-        btnInsertar.setText("Insertar Imagen");
-        btnInsertar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInsertarActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnInsertar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, 140, 30));
-
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel9.setText("Imagen:");
-        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, -1));
-
-        txtURLImagen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel3.add(txtURLImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 290, 30));
-
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 320, 470));
+        jLabel3.setText("Imagen");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 370, -1, -1));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
@@ -267,17 +369,29 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
             }
         });
 
+        btnActualizar.setBackground(new java.awt.Color(51, 153, 0));
+        btnActualizar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnActualizar.setForeground(new java.awt.Color(255, 255, 255));
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1060, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48))
+                .addGap(36, 36, 36))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1061, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,7 +401,9 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
@@ -297,28 +413,40 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
-        this.dispose();
+        String opcion = btnCerrar.getText();
+        switch (opcion) {
+            case "Cancelar":
+                jTabbedPane1.setEnabledAt(1, false);
+                jTabbedPane1.setEnabledAt(0, true);
+                jTabbedPane1.setSelectedIndex(0);
+                btnEditar.setText("Editar Seleccionado");
+                btnCerrar.setText("Cerrar");
+                lblImagenDpto.setIcon(null);
+                break;
+            case "Cerrar":
+                this.dispose();
+        }
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        if(!txtId.getText().isEmpty()){
-            int conf = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro de eliminar este registro?");
-            if (conf == 0) {
-                Departamento dts = new Departamento();
-                dts.setIdDepartamento(Integer.parseInt(txtId.getText()));
-                if (objDpto.eliminarDepartamento(dts)) {
-                    JOptionPane.showMessageDialog(rootPane, "Se ha eliminado el Departamento");
-                    btnBorrar.setEnabled(false);
-                    limpiaCampos();
-                    //Resetea algunos parametros
-                    btnEditar.setEnabled(false);
-                    generarTabla("");
-                } else {
-                    JOptionPane.showMessageDialog(rootPane, "No se pudo eliminar", "Error", ERROR);
-                }
-            }
+    private void btnTipoMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTipoMapaActionPerformed
+        tipoMapa = btnTipoMapa.getText();
+        switch (tipoMapa) {
+            case "Mapa Hidrográfico":
+                btnTipoMapa.setText("Mapa Politico");
+                btnTipoMapa.setBackground(new java.awt.Color(255, 255, 204)); //Cambia el boton Color Amarillo
+                urlImgPolitico = (String) tblDepartamentos.getValueAt(filaSeleccionada, 3);
+                txtImagen.setText(urlImgPolitico);
+                verImagen(urlImgPolitico);
+                break;
+            case "Mapa Politico":
+                btnTipoMapa.setText("Mapa Hidrográfico");
+                btnTipoMapa.setBackground(new java.awt.Color(0, 153, 102)); //Cambia el boton Color Verde
+                urlImgHidrografico = (String) tblDepartamentos.getValueAt(filaSeleccionada, 4);
+                txtImagen.setText(urlImgHidrografico);
+                verImagen(urlImgHidrografico);
+                break;
         }
-    }//GEN-LAST:event_btnBorrarActionPerformed
+    }//GEN-LAST:event_btnTipoMapaActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
 
@@ -327,26 +455,50 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
 
             dts.setNombre(txtNombreDepartamento.getText());
             dts.setSuperficie(Float.parseFloat(txtSuperficie.getText()));
-            dts.setImagen(txtURLImagen.getText());
             dts.setIdDepartamento(Integer.parseInt(txtId.getText()));
+
+            switch (tipoMapa) {
+                case "Mapa Politico":
+                    dts.setImagen(urlImgPolitico);
+                    dts.setImagenDeptoHidro(txtImagen.getText());
+                    break;
+                case "Mapa Hidrográfico":
+                    dts.setImagen(txtImagen.getText());
+                    dts.setImagenDeptoHidro(urlImgHidrografico);
+                    break;
+            }
+
             if (objDpto.editarDepartamento(dts)) {
+                subirImagen();
                 JOptionPane.showMessageDialog(null, "Se ha editado el registro exitosamente");
                 btnEditar.setText("Editar Seleccionado");
-                limpiaCampos();
+                inhabilitarComponentes();
                 generarTabla("");
+                limpiaCampos();
+                lblImagenDpto.setIcon(null);
+                jTabbedPane1.setEnabledAt(0, true);
+                jTabbedPane1.setEnabledAt(1, false);
+                jTabbedPane1.setSelectedIndex(0);
+                btnCerrar.setText("Cerrar");
             } else {
                 JOptionPane.showMessageDialog(null, "Ups, no se ha podido editar");
             }
         } else {
             //Habilita componentes
+            jTabbedPane1.setEnabledAt(1, true);
+            jTabbedPane1.setSelectedIndex(1);
             txtNombreDepartamento.requestFocus();
             txtNombreDepartamento.setEnabled(true);
             txtSuperficie.setEnabled(true);
+            //btnSubirHidro.setEnabled(true);
             //Deshabilita componentes
+            jTabbedPane1.setEnabledAt(0, false);
             btnActualizar.setEnabled(false);
             btnBorrar.setEnabled(false);
+            btnTipoMapa.setEnabled(false);
             //Edita el texto del boton Editar
             btnEditar.setText("Guardar Cambios");
+            btnCerrar.setText("Cancelar");
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -354,7 +506,10 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
         inhabilitarComponentes();
         generarTabla("");
         limpiaCampos();
-        lblImagenDpto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/Bolivia.png")));
+        jTabbedPane1.setEnabledAt(0, true);
+        jTabbedPane1.setEnabledAt(1, false);
+        jTabbedPane1.setSelectedIndex(0);
+        lblImagenDpto.setIcon(null);
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
@@ -365,53 +520,73 @@ public class FrmDepartamentos extends javax.swing.JInternalFrame {
     private void tblDepartamentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDepartamentosMouseClicked
         btnBorrar.setEnabled(true);
         btnEditar.setEnabled(true);
-        int filaSeleccionada = tblDepartamentos.rowAtPoint(evt.getPoint());
+        btnTipoMapa.setEnabled(true);
+        
+        filaSeleccionada = tblDepartamentos.rowAtPoint(evt.getPoint());
         txtId.setText((String) tblDepartamentos.getValueAt(filaSeleccionada, 0));
         txtNombreDepartamento.setText((String) tblDepartamentos.getValueAt(filaSeleccionada, 1));
         txtSuperficie.setText((String) tblDepartamentos.getValueAt(filaSeleccionada, 2));
-        txtURLImagen.setText((String) tblDepartamentos.getValueAt(filaSeleccionada, 3));
-        if (txtURLImagen.getText() != null) {
-            lblImagenDpto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/" + txtURLImagen.getText())));
-        } else {
-            lblImagenDpto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Archivos/imageNull.png")));
+        
+        //Captura el nombre de los Tipos de mapa
+        urlImgPolitico = (String) tblDepartamentos.getValueAt(filaSeleccionada, 3);
+        urlImgHidrografico = (String) tblDepartamentos.getValueAt(filaSeleccionada, 4);
+        
+        tipoMapa = btnTipoMapa.getText();
+        switch (tipoMapa) {
+            case "Mapa Hidrográfico":
+                txtImagen.setText(urlImgHidrografico);
+                verImagen(urlImgHidrografico);
+                break;
+            case "Mapa Politico":
+                txtImagen.setText(urlImgPolitico);
+                verImagen(urlImgPolitico);
+                break;
         }
-
+        //System.out.println(urlImgPolitico + "|" + urlImgHidrografico);
     }//GEN-LAST:event_tblDepartamentosMouseClicked
 
     private void txtNombreDepartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreDepartamentoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreDepartamentoActionPerformed
 
-    private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInsertarActionPerformed
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        // TODO add your handling code here
+
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarImagenActionPerformed
+        ventanaSubirImagen();
+    }//GEN-LAST:event_btnCargarImagenActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel ImagenTitulo;
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBorrar;
+    private javax.swing.JButton btnCargarImagen;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnInsertar;
+    private javax.swing.JButton btnTipoMapa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JLabel lblImagenDpto;
-    private javax.swing.JLabel lblRegistros1;
+    private javax.swing.JLabel lblRegistros;
+    private javax.swing.JLabel lblTipoImagen;
     private javax.swing.JTable tblDepartamentos;
     private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtImagen;
     private javax.swing.JTextField txtNombreDepartamento;
     private javax.swing.JTextField txtSuperficie;
-    private javax.swing.JTextField txtURLImagen;
     // End of variables declaration//GEN-END:variables
 }
