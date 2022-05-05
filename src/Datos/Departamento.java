@@ -10,15 +10,17 @@ public class Departamento {
     private String nombre;
     private float superficie;
     private String imagen;
+    private String imagenDeptoHidro;
 
     public Departamento() {
     }
 
-    public Departamento(int idDepartamento, String nombre, float superficie, String imagen) {
+    public Departamento(int idDepartamento, String nombre, float superficie, String imagen, String imagenDeptoHidro) {
         this.idDepartamento = idDepartamento;
         this.nombre = nombre;
         this.superficie = superficie;
         this.imagen = imagen;
+        this.imagenDeptoHidro = imagenDeptoHidro;
     }
 
     public Departamento(int idDepartamento, String nombre) {
@@ -58,6 +60,15 @@ public class Departamento {
         this.imagen = imagen;
     }
 
+    public String getImagenDeptoHidro() {
+        return imagenDeptoHidro;
+    }
+
+    public void setImagenDeptoHidro(String imagenDeptoHidro) {
+        this.imagenDeptoHidro = imagenDeptoHidro;
+    }
+    
+    
     @Override
     public String toString() {
         return this.nombre;
